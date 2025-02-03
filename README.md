@@ -1,13 +1,12 @@
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+# AngelTokenBot
 
-def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text('Hello! Welcome to AngelTokenBot.')
+This is a simple Telegram bot for AngelToken. 
 
-updater = Updater("YOUR_TELEGRAM_BOT_TOKEN", use_context=True)
-dp = updater.dispatcher
+### Features:
+- Start command (`/start`)
+- More features coming soon!
 
-dp.add_handler(CommandHandler("start", start))
-
-updater.start_polling()
-updater.idle()
+## Setup
+1. Clone the repository.
+2. Install dependencies.
+3. Run `bot.py` with your Telegram bot token.
