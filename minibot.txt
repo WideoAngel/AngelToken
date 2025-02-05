@@ -1,0 +1,33 @@
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQueryHandler
+
+TOKEN = "7751174398:AAHp0E3FjknWBVqemU6E5NfnMYIXOgFRlxE"
+
+# Start command
+def start(update: Update, context: CallbackContext):
+    keyboard = [[InlineKeyboardButton("Earn Tokens", web_app={'url': 'https://your-mini-app-url.com'})],
+                [InlineKeyboardButton("Check Balance", callback_data='balance')],
+                [InlineKeyboardButton("Withdraw Tokens", callback_data='withdraw')]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text("Welcome to AngelTokenBot! Click below to start earning tokens.", reply_markup=reply_markup)
+
+# Handle button clicks
+def button_click(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+    if query.data == 'balance':
+        query.edit_message_text(text="Your current balance is: 100 Tokens")
+    elif query.data == 'withdraw':
+        query.edit_message_text(text="Withdrawal request submitted!")
+
+# Main Function
+def main():
+    updater = Updater(TOKEN, use_context=True)
+    dp = updater.dispatcher
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CallbackQueryHandler(button_click))
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == "__main__":
+    main()

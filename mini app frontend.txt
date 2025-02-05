@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngelToken Mini App</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .button { display: block; width: 200px; margin: 10px auto; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to AngelToken Mini App</h1>
+    <button class="button" onclick="earnTokens()">Earn Tokens</button>
+    <button class="button" onclick="checkBalance()">Check Balance</button>
+    <button class="button" onclick="withdrawTokens()">Withdraw Tokens</button>
+
+    <script>
+        function earnTokens() { alert("You earned 10 tokens!"); }
+        function checkBalance() { alert("Your current balance is: 100 Tokens"); }
+        function withdrawTokens() { alert("Withdrawal request submitted!"); }
+    </script>
+</body>
+</html>
