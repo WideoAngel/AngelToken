@@ -1,0 +1,41 @@
+import firebase_admin
+from firebase_admin import credentials, firestore
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, CallbackContext
+import os
+
+# Firebase Initialization
+cred = credentials.Certificate(os.getenv("FIREBASE_CREDENTIALS"))
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+# Telegram Bot Token
+TOKEN = os.getenv("TOKEN")
+
+def start(update: Update, context: CallbackContext):
+    user = update.effective_user
+    user_ref = db.collection("users").document(str(user.id))
+    user_ref.set({"username": user.username, "tokens": 0}, merge=True)
+    
+    keyboard = [[InlineKeyboardButton("Earn Tokens", callback_data="earn")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(f"Welcome {user.first_name}! Earn tokens by referring friends.", reply_markup=reply_markup)
+
+def earn_tokens(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = query.from_user.id
+    user_ref = db.collection("users").document(str(user_id))
+    user_data = user_ref.get().to_dict()
+    
+    if user_data:
+        new_tokens = user_data.get("tokens", 0) + 10
+        user_ref.update({"tokens": new_tokens})
+        query.answer(f"You earned 10 tokens! Total: {new_tokens}")
+    else:
+        query.answer("User not found!")
+
+updater = Updater(TOKEN, use_context=True)
+dp = updater.dispatcher
+dp.add_handler(CommandHandler("start", start))
+updater.start_polling()
+updater.idle()
